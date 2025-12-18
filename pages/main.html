@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Data Entry</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #0f0f0f;
+  color: #fff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== TOP BAR ===== */
+.topbar {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #222;
+  background: #0f0f0f;
+}
+
+.menu-btn {
+  font-size: 22px;
+  cursor: pointer;
+  margin-right: 14px;
+}
+
+.topbar-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s ease;
+}
+
+.sidebar.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.sidebar-panel {
+  width: 260px;
+  height: 100%;
+  background: linear-gradient(180deg, #111, #0c0c0c);
+  padding: 24px 16px;
+  border-right: 1px solid #222;
+}
+
+.nav-item {
+  padding: 14px 16px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #1a1a1a;
+  border: 1px solid #333;
+}
+
+.nav-item.active {
+  background: #fff;
+  color: #0f0f0f;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main {
+  padding: 16px;
+}
+
+/* ===== DATA ENTRY ===== */
+.student-card {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.student-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.student-name {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.student-meta {
+  font-size: 13px;
+  color: #888;
+}
+
+.status {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.status.ok {
+  background: #1e402b;
+  color: #6affb0;
+}
+
+.status.warn {
+  background: #40331e;
+  color: #ffcc6a;
+}
+
+.status.missing {
+  background: #402020;
+  color: #ff6b6b;
+}
+
+/* ===== PROGRESS ===== */
+.progress-card {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+
+.progress-title {
+  font-size: 14px;
+  color: #aaa;
+  margin-bottom: 6px;
+}
+
+.search-wrapper {
+  margin-bottom: 16px;
+}
+.search-input:focus {
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.05);
+}
+.search-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  color: #fff;
+  font-size: 15px;
+}
+
+.search-input::placeholder {
+  color: #666;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #555;
+  background: #1a1a1a;
+}
+
+.action-btn {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #fff;
+  color: #0f0f0f;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  opacity: 0.9;
+}
+
+.action-btn:active {
+  transform: scale(0.97);
+}
+
+
+.progress-value {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+  .view {
+  display: none;
+}
+
+.view.active {
+  display: block;
+}
+
+/* ===== DESKTOP ===== */
+@media (min-width: 768px) {
+  body {
+    display: flex;
+  }
+
+  .sidebar {
+    position: static;
+    opacity: 1;
+    pointer-events: all;
+    width: 260px;
+      backdrop-filter: blur(2px);
+
+  }
+
+
+
+
+  .topbar {
+    display: none;
+  }
+
+  .main {
+    flex: 1;
+    padding: 24px;
+  }
+
+  
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-panel">
+<div class="nav-item active" data-view="data">Data Entry</div>
+<div class="nav-item" data-view="progress">Progress</div>
+<div class="nav-item" data-view="subjects">Subjects</div>
+  </div>
+</div>
+
+<div style="flex:1">
+  <div class="topbar">
+    <div class="menu-btn" onclick="toggleSidebar()">☰</div>
+    <div class="topbar-title">Data Entry</div>
+  </div>
+
+  <main class="main">
+
+  <section id="view-data" class="view active">
+    <div class="search-wrapper">
+      <input
+        type="text"
+        placeholder="Search by name or admission number"
+        class="search-input"
+        id="studentSearch"
+      />
+    </div>
+
+    <div id="studentsContainer"></div>
+  </section>
+ <section id="view-subjects" class="view">
+  <div class="student-card">
+    <div class="student-name" style="margin-bottom:8px">Subject Entry</div>
+
+    <input
+      id="subjectCode"
+      class="search-input"
+      placeholder="Subject code (e.g. CS301)"
+      style="margin-bottom:10px"
+    />
+
+    <input
+      id="subjectName"
+      class="search-input"
+      placeholder="Subject name"
+      style="margin-bottom:12px"
+    />
+
+  <button id="addSubjectBtn" class="action-btn">Add</button>
+
+  </div>
+
+  <div id="subjectsContainer"></div>
+</section>
+
+
+  <section id="view-progress" class="view">
+    <div class="progress-card">
+      <div class="progress-title">Completed</div>
+      <div class="progress-value">—</div>
+    </div>
+
+    <div class="progress-card">
+      <div class="progress-title">Pending</div>
+      <div class="progress-value">—</div>
+    </div>
+  </section>
+
+</main>
+
+</div>
+
+<script src="../scripts/main.js"></script>
+
+</script>
+
+</body>
+</html>
