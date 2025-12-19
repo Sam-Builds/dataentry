@@ -21,6 +21,46 @@ body {
   overflow-x: hidden;
 }
 
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal.open {
+  display: flex;
+}
+
+.modal-content {
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 420px;
+  padding: 16px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-close {
+  cursor: pointer;
+  color: #aaa;
+  font-size: 18px;
+}
+
+.modal-body {
+  margin-top: 12px;
+}
+
+
 /* ===== TOP BAR ===== */
 .topbar {
   height: 56px;
@@ -55,6 +95,24 @@ body {
 .sidebar.open {
   opacity: 1;
   pointer-events: all;
+}
+
+.inline-form {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px dashed #333;
+  border-radius: 12px;
+}
+
+.inline-form-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.inline-form-row select,
+.inline-form-row input {
+  flex: 1;
 }
 
 .sidebar-panel {
@@ -313,9 +371,59 @@ body {
 
 </div>
 
+<div id="studentModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div id="modalStudentName" class="student-name"></div>
+      <span class="modal-close" id="closeModal">✕</span>
+    </div>
+
+  <div class="modal-body">
+
+  <div class="student-meta" id="modalAdmission"></div>
+
+  <input
+    id="modalUSN"
+    class="search-input"
+    placeholder="USN (optional)"
+    style="margin-top:12px"
+  />
+
+  <hr style="margin:16px 0; border:0; border-top:1px solid #2a2a2a" />
+
+  <!-- MARKS -->
+  <div class="student-name">Marks</div>
+  <button id="addMarksBtn" class="action-btn" style="margin:10px 0">
+    Add Marks
+  </button>
+  <div id="marksContainer"></div>
+
+  <hr style="margin:16px 0; border:0; border-top:1px solid #2a2a2a" />
+
+  <!-- ATTENDANCE -->
+  <div class="student-name">Attendance</div>
+  <button id="addAttendanceBtn" class="action-btn" style="margin:10px 0">
+    Add Attendance
+  </button>
+  <div id="attendanceContainer"></div>
+
+  <hr style="margin:16px 0; border:0; border-top:1px solid #2a2a2a" />
+
+  <!-- FINAL SAVE -->
+  <button id="saveAllBtn" class="action-btn">
+    Save All
+  </button>
+
+</div>
+
+  </div>
+</div>
+
 <script src="../scripts/main.js"></script>
 
 </script>
 
 </body>
+
+
 </html>
