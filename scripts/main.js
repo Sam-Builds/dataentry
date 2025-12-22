@@ -378,13 +378,14 @@ async function loadSubjects() {
     .from("students_subjects")
     .select("code, subject_name, year")
     .order("code");
-
+  console.log(data);
   if (error) {
     console.error("Load subjects error:", error);
     return;
   }
 
   subjects = data;
+  renderSubjects(subjects)
 }
 
 
@@ -393,7 +394,7 @@ function renderSubjects(list) {
   if (!container) return;
 
   container.innerHTML = "";
-
+  console.log("Rendering subjects:", list);
   list.forEach((s) => {
     const card = document.createElement("div");
     card.className = "student-card";
