@@ -147,7 +147,7 @@ function addMarksBlock() {
       <select class="search-input subject-select">
   <option value="">Select subject</option>
 </select>
-      <input class="search-input mark-input" type="number" min="0" max="50" placeholder="Marks / 50" />
+      <input class="search-input mark-input" type="string" min="0" max="50" placeholder="Marks / 50" />
     </div>
 
     <button class="action-btn save-mark-btn">Add</button>
@@ -176,9 +176,13 @@ semSelect.addEventListener("change", populateSubjects);
     const sem = form.querySelector(".sem-select").value;
     const exam = form.querySelector(".exam-select").value;
 const subject = form.querySelector(".subject-select").value;
-    const marks = parseInt(form.querySelector(".mark-input").value, 10);
+    var marks = parseInt(form.querySelector(".mark-input").value, 10);
 
-    if (!subject || isNaN(marks) || marks < 0 || marks > 50) return;
+    if (!subject || marks < 0 || marks > 50) return;
+
+    if(isNaN(marks)) {
+      marks = "AB";
+    }
 
     const semKey = `SEM${sem}`;
     modalState.marks[semKey] ??= {};

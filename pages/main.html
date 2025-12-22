@@ -35,13 +35,26 @@ body {
   display: flex;
 }
 
+/* modal overlay */
+#studentModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* modal box */
 .modal-content {
-  background: #141414;
-  border: 1px solid #2a2a2a;
-  border-radius: 16px;
   width: 90%;
-  max-width: 420px;
-  padding: 16px;
+  max-width: 900px;
+  max-height: 90vh;       /* CRITICAL */
+  background: #fff;
+  border-radius: 12px;
+  display: flex;          /* CRITICAL */
+  flex-direction: column;/* CRITICAL */
+  overflow: hidden;       /* keeps header/footer fixed */
 }
 
 .modal-header {
@@ -56,9 +69,14 @@ body {
   font-size: 18px;
 }
 
+
 .modal-body {
   margin-top: 12px;
+  flex: 1;                 /* fills remaining modal height */
+  overflow-y: auto;        /* ENABLES SCROLLING */
+  padding-right: 4px;      /* prevents scrollbar overlap */
 }
+
 
 
 /* ===== TOP BAR ===== */
