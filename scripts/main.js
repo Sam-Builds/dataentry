@@ -416,13 +416,13 @@ document
   ?.addEventListener("click", async () => {
     const code = document.getElementById("subjectCode").value.trim();
     const name = document.getElementById("subjectName").value.trim();
+    const year = document.getElementById("SubjectYear").value.trim();
 
-    if (!code || !name) return;
+    if (!code || !name || !year) return;
 
     const { error } = await supabaseClient
       .from("students_subjects")
-      .insert([{ code, subject_name: name }]);
-
+      .insert([{ code, subject_name: name, year: year }]);  
     if (error) {
       console.error("Insert subject error:", error);
       return;
